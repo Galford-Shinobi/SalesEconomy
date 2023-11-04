@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SalesEconomy.BackEnd.Data;
+using SalesEconomy.BackEnd.Helpers;
 using SalesEconomy.Shared.Entities;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -30,7 +31,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         ClockSkew = TimeSpan.Zero
     });
 
-//builder.Services.AddScoped<IUserHelper, UserHelper>();
+builder.Services.AddScoped<IUserHelper, UserHelper>();
 
 builder.Services.AddIdentity<User, IdentityRole>(x =>
 {
@@ -84,17 +85,17 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
-//SeedData(app);
+SeedData(app);
 
-//void SeedData(WebApplication app)
-//{
-//    var scopedFactory = app.Services.GetService<IServiceScopeFactory>();
-//    using (var scope = scopedFactory!.CreateScope())
-//    {
-//        var service = scope.ServiceProvider.GetService<SeedDb>();
-//        service!.SeedAsync().Wait();
-//    }
-//}
+void SeedData(WebApplication app)
+{
+    var scopedFactory = app.Services.GetService<IServiceScopeFactory>();
+    using (var scope = scopedFactory!.CreateScope())
+    {
+        var service = scope.ServiceProvider.GetService<SeedDb>();
+        service!.SeedAsync().Wait();
+    }
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
